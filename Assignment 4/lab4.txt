@@ -1,0 +1,104 @@
+Step1: 
+$ export PATH=/usr/local/cs/bin:$PATH
+Since Git is installed in /usr/local/cs/bin, we add it to PATH variable
+
+Step2: 
+$ mkdir gitroot
+$ cd gitroot
+$ git clone git://git.savannah.gnu.org/diffutils.git
+Make a directory 'gitroot' and get a copy of Diffutils Git repository
+
+Step3:
+$ cd diffutils
+$ git log > git-log.txt
+Get a log of changes to Diffutils' master branch, and put it into “git-log.txt”
+   
+Step4:
+$ git tag > git-tags.txt 
+Generate a list of tags for Diffutils, and put it into the file “git-tags.txt”
+   
+Step5:
+$ emacs git-log.txt
+C+s “main: quote ‘like this’ or “like this”, not `like this’”
+Search for the commit we want, and we record the commit number:
+62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f
+
+Step6:
+$ git show 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f > quote-patch.txt
+Generate a patch for our concerning commit and put it into “quote-patch.txt”
+
+Step7:
+$ git checkout v3.0
+Check out version 3.0 of Diffutils from the repository
+
+Step8:
+$ patch -p1 < quote-patch.txt
+Apply patch to files whose PATH is the same as the patch
+Type “RETURN” when asked to select files to patch    
+Only certain files in version 3.0 get patched
+
+Step9:
+$ git status
+Find out what files are patched (aka modified) and what files are 
+still untracked
+
+Step10:
+$ emacs file_name
+C-x v u
+Use emacs to edit all modified files without a .c-postfix and discard
+the changes (called revert) made to these files 
+   
+Step11:    
+$ emacs file_name.c
+C-x v =
+C-u C-c C-a
+For files whose names have .c-postfix, we use emacs to edit them
+First, “C-x v =“ points to hunks and helps us see the changes made 
+to these files
+Second, if these changes occur in comments of codes, we should use
+“C-x C-c C-a” to unbuild the hunks
+Otherwise, keep these changes
+
+Step12:
+$ emacs file_name.c.rej
+$ emacs file_name.c
+Examine the patching rejected files and manually make the changes in
+the corresponding file_name.c
+
+Step12:
+$ git clean -f
+Remove untracked files
+
+Step13:
+$ git status
+This time, only six modified files get reported
+
+Step14:
+$ git diff > quote-3.0-patch.txt
+Put the patch into a new file
+
+Step15:
+$ export PATH=/usr/local/cs/bin:$PATH
+$ ./bootstrap
+$ ./configure
+$ make
+Build the modified version of diffutils  
+
+Step16:
+$ cd src
+$ diff .-
+$ diff ——help   
+Use these commands, we check that all “`” have been change to “‘”
+
+Step17:
+Do the following things for advanced check:
+$ mkdir diffutils-3.0-patch
+$ mkdir diffutils-3.0
+$ mkdir new
+$ cd new
+$ git clone git://git.savannah.gnu.org/diffutils.git
+$ cd ..
+$ cp -r diffutils/src diffutils-3.0-patch
+$ cp -r new/diffutils/src diffutils-3.0
+$ diff -pru diffutils-3.0 diffutils-3.0-patch > quote-3.0-test.txt
+$ diff -pru quote-3.0-test.txt quote-3.0-patch.txt

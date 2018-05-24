@@ -1,0 +1,92 @@
+For this lab, my parter is Shuowen Shen
+Setup:
+$ sudo apt-get install openssh-server
+$ sudo apt-get install openssh-client
+
+As server:
+Step1:
+$ ssh-keygen
+Enter file in which to save the key (/home/xiaopei/.ssh/id_rsa): Enter
+Enter passphrase (empty for no passphrase): 19941125
+Enter same passphrase again: 19941125
+Your identification has been saved in /home/xiaopei/.ssh/id_rsa.
+Your public key has been saved in /home/xiaopei/.ssh/id_rsa.pub.
+The key fingerprint is:
+24:d1:a7:71:3d:58:4b:78:bd:72:a1:db:a1:8a:ad:37 xiaopei@xiaopei-VirtualBox
+The key's randomart image is:
++--[ RSA 2048]----+
+|      ..   =o.   |
+|       .o =.+.o  |
+|      . .= ..o o |
+|       o.   o +  |
+|        S    * . |
+|            o .  |
+|         o .     |
+|        . E      |
+|        .o .     |
++-----------------+
+Generate public/private rsa key pair
+
+Step2:
+$ sudo useradd -d /home -m shuowen
+Add an account for the client on the server
+
+Step3:
+$ sudo passwd shuowen
+UNIX password: abcde
+Retype new UNIX password: abcde
+Set up the password for the newly added account
+
+Step4:
+$ cd /home/shuowen
+$ sudo mkdir .ssh
+Create a ".ssh" directory for the client
+
+step4:
+$ sudo chown -R shuowen .ssh
+$ sudo chmod 700 .ssh
+Change the ownership and the permission on the ".ssh" directory for the client
+
+As client:
+Step1:
+$ ssh-keygen
+Enter file in which to save the key (/home/xiaopei/.ssh/id_rsa): Enter
+/home/xiaopei/.ssh/id_rsa already exists
+Overwrite (y/n)? y
+Enter passphrase (empty for no passphrase): 19941125
+Enter same passphrase again: 19941125
+Your identification has been saved in /home/xiaopei/.ssh/id_rsa.
+Your public key has been saved in /home/xiaopei/.ssh/id_rsa.pub.
+The key fingerprint is:
+d2:13:61:05:e3:a6:cb:63:4f:bf:ac:00:55:54:fb:89 xiaopei@xiaopei-VirtualBox
+The key's randomart image is:
++--[ RSA 2048]----+
+|       .B+o      |
+|       + o .     |
+|      . + .      |
+|     . + . o .   |
+|    . o S E o    |
+|     o o .       |
+|      * .        |
+|     . = o       |
+|        o.+.     |
++-----------------+
+Generate public/private rsa key pair
+
+Step2:
+$ ssh-copy-id -i username@server_ip_address
+Copy the public key to the server
+
+Step3:
+$ ssh-add
+Add the private key to ssh-agent
+
+Step4:
+I get my parter's IP address by using "$ ifconfig" in his terminal.
+$ ssh -X xiaopei@10.0.2.15
+Establish the connection of my Ubuntu, aka the client, to the server
+
+Step5:
+$ exit
+Relogin by using: $ ssh -X xiaopei@10.0.2.15
+I can do something like opening the firefox browser on the remote server

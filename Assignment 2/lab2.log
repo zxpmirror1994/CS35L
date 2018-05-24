@@ -1,0 +1,123 @@
+export LC_ALL=‘C’
+cd Desktop
+cat /usr/share/dict/words | sort > words
+wget http://cs.ucla.edu/classes/spring15/cs35L/
+assign/assign2.html > assign2.html
+
+cat assign2.html | tr -c ‘A-Za-z’ ‘[\n*]’ > record1:
+This command replace each character other than ‘A-Z’ 
+and ‘a-z’ (English letters in uppercase and lowercase) 
+by a newline
+
+cat assign2.html | tr -cs ‘A-Za-z’ ‘[\n*]’ > record2:
+Basically, this command does the same thing as the 
+previous command does. However, the difference is that 
+this command will replace consecutive same characters 
+other than ‘A-Za-z’ with just one newline (squeeze the 
+text file)
+
+cat assign2.html | tr -cs ‘A-Za-z’ ‘[\n*]’ | sort > record3:
+First, this command do the same deletion of characters 
+other than English letters and addition of newlines as 
+the previous command does. After that, this command also 
+sorts lines of the text file based on ASCII sorting
+
+cat assign2.html | tr -cs ‘A-Za-z’ ‘[\n*]’ | sort -u > record4:
+Besides what previous command does, this command delete 
+duplicates of lines of text files, leaving unique lines 
+of text files
+
+cat assign2.html | tr -cs ‘A-Za-z’ ‘[\n*]’ | sort -u\ 
+| comm - words > record5:
+This command compare lines of text files that we get from 
+previous command with the lines of the text file named “words”. 
+In particular, column 1 is for lines unique to “record4”(or 
+files equivalent to “record4”), column is for lines unique 
+to “words” and column 3 is for lines that appear in both files
+
+cat assign2.html | tr -cs ‘A-Za-z’ ‘[\n*]’ | sort -u\ 
+| comm -23 - words > record6:
+This command also does the comparison between “record4”(or 
+files equivalent to “record4”) and “words”. However, the 
+output only contains the lines unique to “record4”
+
+(buildwords)Hawaiian spelling checker:
+#!/bin/bash
+export LC_ALL='C'
+grep '<td>' \:
+extract all lines with <td>
+
+| tr ‘[:upper:]’ ‘[:lower:]’\:
+translate uppercase letters to lowercase letters
+
+| sed ’s/`/‘\’’/g’ \:
+replace ASCII grave accent by ASCII apostrophe
+
+| sed ’s/<[^>]*>//g' \:
+remove all html tags
+
+| tr -s ‘[:space:]’\:
+delete spaces
+
+| sed -n 2~2p \:
+leave all even number line
+
+| sed ’s/,/\n/g’ \:
+replace commas with newlines
+
+| sed ’s/ /\n/g’ \:
+replace space with newlines:
+
+| sed 's/\r/\n/g' \:
+replace \r with newlines:
+
+| tr -s '[:space:]' \:
+delete spaces
+
+| sed '/[^a^e^i^o^u^p^k^m^n^l^w^h^'\'']/d'\:
+delete entries with letters or characters other than
+a, e, i, o, u, p, k, m, n, l, w, h, \
+
+| sort -u
+sort the list based on ASCII
+
+wget cs.ucla.edu/classes/spring15/cs35L/assign/assign2.html
+cat assign2.html | tr ‘[:upper:]’ ‘[:lower:]’\ 
+| tr -cs ‘a-z’ ‘[\n*]’ | sort -u | comm -23 - hwords > test
+There are totally 405 “misspelled” Hawaiian words
+
+cat assign2.html | tr ‘[:upper:]’ ‘[:lower:]’\ 
+| tr -cs ‘a-z’ ‘[\n*]’ | sort -u | comm -23 - words > test
+There are totally 38 “misspelled” English words
+
+cat assign2.html | tr ‘[:upper:]’ ‘[:lower:]’\ 
+| tr -cs ‘a-z’ ‘[\n*]’ | sort -u | comm -23 - hwords\ 
+| comm -12 - words > test
+There are totally 370 words that are “misspelled” as Hawaiian 
+but not as English
+Examples: a, able, about, above, …, you, your, z, za
+
+cat assign2.html | tr ‘[:upper:]’ ‘[:lower:]’\ 
+| tr -cs ‘a-z’ ‘[\n*]’ | sort -u | comm -23 - words\ 
+| comm -12 - hwords > test
+There are 3 words that are “misspelled” as English but 
+not as Hawaiian
+Examples: halau, lau, wiki
+
+buildwords' script:
+#!/bin/bash
+export LC_ALL='C'
+grep '<td>' \
+| tr '[:upper:]' '[:lower:]' \
+| sed 's/`/'\''/g' \
+| sed 's/<[^>]*>//g' \
+| tr -s '[:space:]' \
+| sed -n 2~2p \
+| sed 's/,/\n/g' \
+| sed 's/ /\n/g' \
+| sed 's/\r/\n/g' \
+| tr -s '[:space:]' \
+| sed '/[^a^e^i^o^u^p^k^m^n^l^w^h^'\'']/d' \
+| sort -u
+
+cat hwnwdseng.htm | ./buildwords > hwords

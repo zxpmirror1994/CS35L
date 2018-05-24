@@ -1,0 +1,14 @@
+#!/bin/bash
+export LC_ALL='C'
+grep '<td>' \
+| tr '[:upper:]' '[:lower:]'\
+| sed 's/`/'\''/g'\
+| sed 's/<[^>]*>//g'\
+| tr -s '[:space:]'\
+| sed -n 2~2p\
+| sed  's/,/\n/g'\
+| sed  's/ /\n/g'\
+| sed 's/\r//g'\
+| tr -s '[:space:]' \
+| sed '/[^a^e^i^o^p^k^m^n^l^w^h^u^'\'']/d'\
+| sort -u

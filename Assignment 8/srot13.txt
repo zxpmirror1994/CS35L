@@ -1,0 +1,31 @@
+The performance of srot13, srot13u and srot13s on a 16M file “randombytes.txt”
+srot13:
+real	0m6.069s
+user	0m5.806s
+sys	0m0.035s
+
+srot13u:
+Number of comparisions: 109927033
+
+real	0m29.731s
+user	0m6.773s
+sys	0m22.735s
+
+srot13s:
+real	0m4.326s
+user	0m5.165s
+sys	0m0.120s
+
+srot13s is the fastest and srot13u is the slowest.
+The reason is that srot13u uses the system calls so that it lasts longer. 
+After that, I change the number of lines in the text files and compare the
+number of comparisons made by srot13u.
+The result is:
+Input lines            Comparisons
+100                       586
+1000                      7695
+10000                     157732
+100000                    3678821
+1000000                   19454421
+Approximately, if the number of input lines is n, the number of comparisons is 
+O(nlogn).

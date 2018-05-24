@@ -1,0 +1,10 @@
+1. The upper left subwindow shows a series commits made to this
+repository. The most recent commit is on the top. Also, we can 
+find out the mergepoint.
+2. The upper middle subwindow shows the commit authors.
+3. The upper right subwindow shows when the commits are made.
+4. The lower left subwindow shows some details about the commit,
+including its parent, child and branches. Also, we can select to show
+the diff, old version or new version of files.
+5. The lower right subwindow lists all files influenced by the commit
+we concern (merging).

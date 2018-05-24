@@ -1,0 +1,22 @@
+Q1: 
+Since the below for-loop using “case_long_iso_time_style” is removed, 
+the date display will follow the traditional Unix format. Therefore,
+the line “case_long_iso_time_style” is not useful anymore. In fact, it is
+not necessary to remove that line. However, to keep the code concise and
+clear, the line is removed.
+
+Q2:
+With the patch being applied, “ls -l” will display the traditional Unix
+format. However, for people who do not understand English, this format 
+becomes a trouble. They may not be able to read the date and the time. 
+
+Q3:
+Since the script is invoke on an empty file, the program is not able to
+get indexed lines and shows an error: “IndexError: list index out of
+range”
+
+Q4:
+When I run the program on Python3, there is a syntax error saying “except 
+IOError as (errno, strerror):”. That’s because Python3 applies a new I/O 
+library and supports different syntaxes from Python2.
+

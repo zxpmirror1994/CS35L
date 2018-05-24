@@ -1,0 +1,125 @@
+Step3:
+$ emacs generatebytes.c
+#include <stdio.h>
+int main()
+{
+  int i = 0;
+  for (; i < 1000000; i++)
+    printf(“Ihave”)
+}
+$gcc generatebytes.c -o generatebytes
+$./generatebytes > bytes.txt
+By these instructions, I create a file containing 5M characters in a file
+named ‘bytes.txt’
+
+Step4:
+(a)
+$ gcc tr2b.c -o tr2b
+$ strace -c -o strace_output1 ./tr2b ‘have’ ‘want’ < bytes.txt > tr2b_bytes.txt
+$ emacs strace_output1
+Transilterate one file to another by tr2b.c. tr2b.c uses a larger buffer so that there
+will be fewer system calls. Therefore, it is faster.
+The output is:
+ time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  -nan    0.000000           0        79           read
+  -nan    0.000000           0        77           write
+  -nan    0.000000           0         2           open
+  -nan    0.000000           0         2           close
+  -nan    0.000000           0         4           fstat
+  -nan    0.000000           0        10           mmap
+  -nan    0.000000           0         3           mprotect
+  -nan    0.000000           0         1           munmap
+  -nan    0.000000           0         1           brk
+  -nan    0.000000           0         1         1 access
+  -nan    0.000000           0         1           execve
+  -nan    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000000                   182         1 total
+
+(b)
+$ gcc tr2u.c -o tr2u
+$ strace -c -o strace_output2 ./tr2u ‘have’ ‘want’ < bytes.txt > tr2u_bytes.txt
+$ emacs strace_output2
+Transilterate one file to another by tr2u.c. tr2u.c uses a one-byte buffer so that there
+will be a lot more system calls. Therefore, it is slower.
+The output is:
+ time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 58.80    0.530573           0   5000000           write
+ 41.20    0.371701           0   5000002           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         8           mmap
+  0.00    0.000000           0         3           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.902274              10000024         1 total
+
+(c)
+$ strace -c -o strace_output1 ./tr2b ‘have’ ‘want’ < bytes.txt > tr2b_bytes.txt
+$ emacs strace_output1
+Transliterate one file to the terminal by tr2b.c.
+The output is:
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000839           0      4883           write
+  0.00    0.000000           0        79           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         4           fstat
+  0.00    0.000000           0        10           mmap
+  0.00    0.000000           0         3           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000839                  4988         1 total
+
+(d)
+$ strace -c -o strace_output2 ./tr2u ‘have’ ‘want’ < bytes.txt > tr2u_bytes.txt
+$ emacs strace_output2
+Transliterate one file to the terminal by tr2u.c.
+The output is:
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 56.67    0.301594           0   5000000           write
+ 43.33    0.230630           0   5000002           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         8           mmap
+  0.00    0.000000           0         3           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.532224              10000024         1 total
+
+Step5:
+Compare time used
+$ time ./tr2b have want < bytes.txt > tr2b_bytes.txt
+real	0m0.171s
+user	0m0.096s
+sys	0m0.008s
+$ time ./tr2u have want < bytes.txt > tr2u_bytes.txt
+real	0m5.319s
+user	0m0.278s
+sys	0m4.968s
+$ time ./tr2b have want < bytes.txt
+real	0m0.891s
+user	0m0.209s
+sys	0m0.037s
+$ time ./tr2u have want < bytes.txt
+real	0m7.023s
+user	0m0.261s
+sys	0m6.754s

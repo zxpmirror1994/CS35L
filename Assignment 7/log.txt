@@ -1,0 +1,50 @@
+Step1:
+$ export PATH=/usr/local/cs/bin:$PATH
+Add /usr/local/cs/bin to PATH
+
+Step2:
+$ sort --version
+sort (GNU coreutils) 8.23
+Copyright (C) 2014 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Mike Haertel and Paul Eggert.
+
+Check the newest version of “sort”
+
+Step3:
+$ od -An -t f -N80M < /dev/urandom | tr -s ' ' '\n' | sed '/^$/d' > randombytes.txt
+-An: Disable addresses
+-t f: Double-precision floating point  
+-N <count>: Format no more than count bytes of input
+Generate the file containing random bytes as intended
+
+Step4:
+$ time –p sort –g --parallel=1 randombytes.txt > /dev/null
+real 199.19
+user 198.97
+sys 0.22
+
+$ time –p sort –g --parallel=2 randombytes.txt > /dev/null 
+real 107.11
+user 205.00
+sys 0.32
+
+$ time –p sort –g --parallel=4 randombytes.txt > /dev/null
+real 60.47
+user 205.02
+sys 0.41
+
+$ time –p sort –g --parallel=8 randombytes.txt > /dev/null
+real 36.92
+user 209.69
+sys 0.40
+
+Conclusion:
+The more threads we use, the shorter it takes to sort the numbers.
+The reason is each thread is in charge of sorting a portion of the 
+entire random number set, and parallel threads are running at the 
+same time. However, the user time gets longer as the number of 
+threads increases.

@@ -1,0 +1,97 @@
+Step1:
+$ wget http://cs.ucla.edu/classes/spring15/cs35L/assign/coreutils-with-bug.tar.gz
+Get the zip file from the website
+
+Step2:
+$ tar -xzvf coreutils-with-bug.tar.gz 
+Unzip the zip file
+
+Step3:
+$ cd coreutils-with-bug
+
+Step4:
+$ wget http://cs.ucla.edu/classes/spring15/cs35L/assign/coreutils.diff
+Get the patch file from the website
+
+Step5:
+$ ./configure
+$ make
+Install the coreutils-with-bug
+
+Error message appears:
+In file included from utimecmp.c:41:
+utimens.h:2: error: conflicting types for 'futimens'
+/usr/include/sys/stat.h:374: note: previous declaration of 'futimens' was here
+make[3]: *** [utimecmp.o] Error 1
+make[3]: Leaving directory `/w/home.03/ee/ugrad/xiaopei/hw5/coreutils-with-bug/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/w/home.03/ee/ugrad/xiaopei/hw5/coreutils-with-bug/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/w/home.03/ee/ugrad/xiaopei/hw5/coreutils-with-bug'
+make: *** [all] Error 2
+
+Question1: What problems did you have when building it as-is, 
+and why did the renaming patch fix them?
+Answer: Before applying the patch, some errors occur while I was trying to $ make.
+This might be caused by certain commands or codes in coreutils-with-bug that do not
+have the prefix “coreutils_”. However, this problem is fixed due to the patch that 
+adds the lost prefix.
+
+Step6:
+$ patch -p0 < coreutils.diff
+Apply the patch file. Use p0 because the patch file starts with src/*.c
+
+Step7:
+$ ./configure
+$ make
+Install again
+
+Step8:
+$ tmp=$(mktemp -d)
+$ cd $tmp
+$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+$ touch now
+$ sleep 1
+$ touch now1
+$ cd
+$ cd hw5/coreutils-with-bug/src
+$ TZ=UTC0 ./ls -lt --full-time $tmp/wwi-armistice $tmp/now $tmp/now1
+$ cd
+Reproduce the error
+Below is the output:
+-rw-r--r-- 1 xiaopei eeugrad 0 1918-11-11 11:00:00.000000000 +0000 /tmp/tmp.Re4pjsuRIC/wwi-armistice
+-rw-r--r-- 1 xiaopei eeugrad 0 2015-05-02 04:59:04.383422755 +0000 /tmp/tmp.Re4pjsuRIC/now1
+-rw-r--r-- 1 xiaopei eeugrad 0 2015-05-02 04:58:58.915230022 +0000 /tmp/tmp.Re4pjsuRIC/now$ 
+
+Step9:
+$ cd src 
+$ emacs ls.c
+M-x gdb
+$ file ./ls
+$ run -lt $tmp/wwi-armistice $tmp/now $tmp/now1
+break sort_files
+break compare_mtime
+break timespec_cmp
+
+Debug by using gdb. The bug is inside the file timespec.h, in which the integer overflow happens.
+There are not enough number of bits to hold the time. I fix this problem by changing the data type
+from “int” to “signed long long int”. The latter one can hold more bits at a time. After doing this,
+I repeat Step7 and Step8. The output shows that the entry containing “1918-11-11” now appears 
+at the very end of the output.
+Below is the output:
+-rw-r--r-- 1 xiaopei eeugrad 0 2015-05-02 04:59:04.383422755 +0000 /tmp/tmp.Re4pjsuRIC/now1
+-rw-r--r-- 1 xiaopei eeugrad 0 2015-05-02 04:58:58.915230022 +0000 /tmp/tmp.Re4pjsuRIC/now$ 
+-rw-r--r-- 1 xiaopei eeugrad 0 1918-11-11 11:00:00.000000000 +0000 /tmp/tmp.Re4pjsuRIC/wwi-armistice
+
+Step10:
+$ cp timespec.h copy.h
+Make the changes according to what I state in Step9 for timespec.h
+$ diff -u timespec.h copy.h > lab5.txt
+C-x 4 a 
+Create the lab5.txt recording the change we made to timespec.h and write something in ChangeLbg
+
+Question2: How well does SEASnet do?
+Answer: Something weird happens: On the NFS filesystem, a timestamp shows a date in the future.
+The NFS filesystem applies the unsigned 32 bit time stamps, but the local linux server 
+applies the signed 32 bit time stamps. Hence, it’s possible for us to see a future date due to integer overflow.
+

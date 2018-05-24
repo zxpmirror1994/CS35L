@@ -1,0 +1,10 @@
+Question1:
+The answer is Yes because the bytes going across the network are already encrypted.
+(1) The answer is still Yes because the private key is still concealed so that knowing all keystrokes are not enough to attack the account
+(2) The answer is No because once they have physical control of the USB, they are able to access the private key.
+
+Question2:
+Anyone is free to create a public key and sign and send it to me. 
+The function of "gpg --verify" is to check whether the file gets changed or not. 
+Hence, it  always works if the file is not currently being modified.
+We can ask the sender to write down the public key and compare it with the content in the file containing the public key.

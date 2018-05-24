@@ -1,0 +1,58 @@
+Step1: wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz
+Download the zipped file
+
+Step2: tar -xzvf coreutils-7.6.tar.gz
+Unzip the file
+
+Step3: mkdir coreutilsInstall
+Make a new directory where to install coreutils 7.6
+
+Step4: ./configure —prefix=/u/ee/ugrad/xiaopei/coreutils-7.6/coreutilsInstall
+With the prefix flag, we can direct to previously created directory 
+and run the configure script that we intend to install coreutils 7.6 
+
+Step5: make
+Compile the file
+
+Step6: make install
+Install the file into /u/ee/ugrad/xiaopei/coreutils-7.6/coreutilsInstall
+
+Step7: localedef en_US.UTF-8 -i en_US -f UTF-8
+Generate the en_US.UTF-8 locale
+
+Step8: 
+cd ~
+export LC_ALL='en_US.UTF-8'
+Change locale to en_US.UTF-8
+
+Step9: 
+cd coreutils-7.6/coreutilsInstall/bin
+touch recent
+touch -t 201404152158.00 yearago
+./ls -l
+Reproduce the bug and get the YYYY-MM-DD date
+-rw-r—r— 1 xiaopei eeugrad 0 2015-04-15 21:58 recent
+-rw-r—r— 1 xiaopei eeugrad 0 2014-04-15 21:58 yearago
+
+Step10:
+cd coreutils-7.6 
+emacs patch_file
+Create patch_file in directory coreutils-7.6 and paste Brady’s patch
+content.
+
+Step11: patch -p1 < patch_file
+We need to modify the PATH name so that it matches src/ls.c.
+
+Step12: 
+cd coreutils-7.6
+make
+Rebuild patched ls.c
+
+Step13: 
+cd coreutils-7.6/coreutilsInstall/bin
+./ls -l
+Test the performance of the patch. This time, the output becomes:
+-rw-r-r- 1 xiaopei eeugrad 0 Apr 15 21:58 recent
+-rw-r-r- 1 xiaopei eeugrad 0 Apr 15  2014 yearago 
+
+

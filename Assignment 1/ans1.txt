@@ -1,0 +1,105 @@
+1. “man SP -k <word>”
+I discovered it by typing “man man”
+
+2. “whereis SP cp Enter” 
+cp: /bin/cp /usr/share/man/man1/cp.1p.gz /usr/share/man/man1p/cp.1.gz
+“whereis SP wc Enter” 
+wc: /usr/bin/wc /usr/share/man/man1/wc.1p.gz /usr/share/man/man1p/wc.1.gz
+
+3. “find SP /usr/bin/? Enter”
+I found three of them: X, w and [
+“whatis SP X Enter”
+X: a portable, network-transparent window system
+“whatis SP w Enter”
+w: Show who is logged on and what they are doing
+“whatis SP [ Enter”
+[: a shell related program that does not have man pages
+
+4. “ls SP -l SP /usr/bin/cc Enter”
+File that’s executed is gcc
+
+5. “chmod SP g-s” clears the set group ID (becomes -) of the directory
+
+6. “find SP . SP -mtime SP -3”
+I discovered this by typing “man find”
+
+7. “find SP / SP -mtime SP -3”
+I discovered this by typing “man find”
+
+8. “whereis SP find Enter”
+By typing this, I found find is under the directory /bin.
+“ls SP /bin SP -l Enter”
+By typing this, I found there’re 18 symbolic links under the same 
+directory of find.
+
+9. “ls SP /usr/lib SP -l SP -t Enter”
+The oldest regular file in the /usr/lib directory is: 
+-rwxr-xr-x 1 root root   587364 Nov 24  2009 libsqlite3.so.0.8.6
+“ls directory -l -t” lists the directory and orders them in time.
+
+10. The locale command gets data from its environmental variables, 
+including “LC_CTYPE”, “LC_COLLATE”, “LC_TIME”, 
+“LC_NUMERIC”, “LC_MONETARY” and “LC_MESSAGES”
+I discovered this by typing “man locale”
+
+11. “C-h SP C-h SP a SP sort”
+Buffer-menu-sort, Buffer-menu-sort-by-column, ibuffer-invert-sorting, 
+ibuffer-toggle-sorting-mode, rmail-sort-by-author, 
+rmail-sort-by-correspondent,
+rmail-sort-by-date, rmail-sort-by-labels, rmail-sort-by-lines,
+rmail-sort-by-recipient, rmail-sort-by-subject, sort-columns,
+sort-fields, sort-lines, sort-numeric-fields, sort-pages, sort-paragrphs,
+sort-regexp-fields
+
+12.
+C-a: Move to the beginning of the line (`move-beginning-of-line')
+C-b: Move backward one character (`backward-char')
+C-c: Mode-specific prefix
+C-d: (delete-char) deletes the character after point, similar to Delete,
+but regardless of whether the region is active
+C-e: Move to the end of the line (`move-end-of-line')
+C-f: Move forward one character (`forward-char')
+C-g: Quitting with C-g is the way to get rid of a partially typed command,
+or a numeric argument that you don’t want
+C-h: The prefix key C-h stands for “help”
+C-j: Insert a paragraph break (two newlines) and check the previous
+paragraph for unbalanced braces or dollar signs (tex-terminate-paragraph)
+C-k: (kill-line) erases (kills) a line at a time
+C-l: Scroll the selected window so the current line is the center-most 
+text line; on subsequent consecutive invocations, make the current line the 
+top line,the bottom line, and so on in cyclic order. 
+Possibly redisplay the screen too 
+(recenter-top-bottom)                                  
+C-n: Move down one screen line (`next-line')
+C-o: Insert a blank line after the cursor (open-line)
+C-p: Move up one screen line (`previous-line')
+C-q: (1)followed by any non-graphic character inserts 
+that character                                  
+(2)followed by a sequence of octal digits inserts 
+the character with the specified octal character code
+C-r: Incremental search backward (isearch-backward)
+C-s: Incremental search forward (isearch-forward)
+C-t: Transpose two characters (transpose-chars)
+C-u: specify a numeric argument is to type C-u (universal-argument) 
+followed by some digits, or (for a negative argument) a minus sign 
+followed by digits
+C-v: Scroll forward by nearly a full window (scroll-up-command)
+C-w: Kill the region (kill-region)
+C-y: Yank last killed text (`yank')
+C-z: On a text terminal, suspend Emacs; on a graphical display, 
+“minimize” the selected frame (suspend-emacs) 
+I found this by typing “C-h SP r Enter”
+
+13. C-g gets rid of a partially typed command, or a numeric argument that 
+you don’t want. It is a relatively safe way to quit an executing progress.
+I found this by typing “C-h SP r Enter”
+
+14. "Yanking" means reinserting text previously killed. It’s a usual way
+to move or copy text.
+
+15. The output of ls SP -l is: total 394464
+The output of Emacs dired command is: total used in directory 394552 
+available 3106508
+ls -l only lists the directories (without subdirectories or hidden 
+directories), but the directory listing of the Emacs dired command lists 
+both the used and available directories

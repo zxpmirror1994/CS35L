@@ -1,0 +1,43 @@
+#!/bin/bash
+export LC_ALL='C'
+dir=$1
+cd "$dir"
+prior=`ls .[^.]* | sort -f`
+remain=`ls | sort -f`
+declare -a ARRAY
+count=0
+
+for file in $prior
+do
+  if [ ! -L "$file" ]&&[ -f "$file" ]&&[ -r "$file" ]
+  then
+       ARRAY[$count]="$file"
+       let count=count+1
+  fi
+done
+    
+for file in $remain
+do
+  if [ ! -L "$file" ]&&[ -f "$file" ]&& [ -r "$file" ]
+  then
+       ARRAY[$count]="$file"
+       let count=count+1
+  fi
+done
+
+index=0
+while [ $index -lt $[count-1] ]
+do
+   let next=index+1 
+   while [ $next -lt $count ]
+   do
+      cmp -s "${ARRAY[$index]}" "${ARRAY[$next]}"
+      if [ $? -eq 0 ]
+      then
+          ln -f "${ARRAY[$index]}" "${ARRAY[$next]}"
+          break
+      fi
+      let next=next+1
+   done
+   let index=index+1
+done

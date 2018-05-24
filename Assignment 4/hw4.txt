@@ -1,0 +1,64 @@
+Step1: 
+$ export PATH=/usr/local/cs/bin:$PATH
+Since Git is installed in /usr/local/cs/bin, we add it to PATH variable
+
+Step2:
+$ git checkout v3.0 -b quote
+Make a branch named “quote” for v3.0
+
+Step3:
+$ cp /u/ee/ugrad/xiaopei/gitroot/diffutils/quote-3.0-patch.txt 
+/u/ee/ugrad/xiaopei/gitroot/diffutils3/diffutils
+Copy the patch into the directory containing v3.0 diffutils (not modified)
+   
+Step4:
+$ patch -p1 < quote-3.0-patch.txt
+Install the change in the new branch with the patch
+
+Step5:
+$ emacs quote-3.0-patch.txt
+C-x 4 a
+Type:
+   “Replace backticks “`” in files by single quote ”’””
+Compose an appropriate ChangeLog entry   
+
+Step6:
+$ git add src/cmp.c src/diff.c src/diff3.c src/dir.c src/sdiff.c src/util.c
+$ git commit --file=/u/ee/ugrad/xiaopei/gitroot/diffutils3/diffutils/ChangeLog
+Commit changes to the branch 
+
+[quote 77252d6] 2015-04-23  Xiaopei Zhang  <xiaopei@lnxsrv04.seas.ucla.edu>
+ Committer: Xiaopei Zhang <xiaopei@lnxsrv04.seas.ucla.edu>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 6 files changed, 43 insertions(+), 43 deletions(-)
+
+Step7:
+$ git format-patch -1 --stdout >
+~/gitroot/diffutils3/diffutils/formatted-patch.txt
+Generate a patch that could work without hand modification
+ 
+Step8:
+Partner: Shuowen Shen
+$ git checkout v3.0 -b partner
+Create a new branch for my partner
+$ git am < formatted-patch-Shen.txt
+Apply the patch and build the system
+$ make check 
+Check if it works
+
+Step9:
+$ make distdir
+Make a new directory called "diffutils-Shen”
+$ emacs diffutils-Shen
+Inspect the ChangeLog file, it works!
+
